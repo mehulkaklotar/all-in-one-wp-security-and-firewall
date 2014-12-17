@@ -132,7 +132,11 @@ class AIOWPSecurity_User_Login
                 return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: Invalid login credentials.', 'aiowpsecurity'));
             } else 
             {
-                return new WP_Error('incorrect_password', sprintf(__('<strong>ERROR</strong>: Incorrect password. <a href="%s" title="Password Lost and Found">Lost your password</a>?', 'aiowpsecurity'), esc_url( wc_lostpassword_url() ) ));
+                if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+                    return new WP_Error('incorrect_password', sprintf(__('<strong>ERROR</strong>: Incorrect password. <a href="%s" title="Password Lost and Found">Lost your password</a>?', 'aiowpsecurity'), esc_url( wc_lostpassword_url() ) ));
+                }else{
+                    return new WP_Error('incorrect_password', sprintf(__('<strong>ERROR</strong>: Incorrect password. <a href="%s" title="Password Lost and Found">Lost your password</a>?', 'aiowpsecurity'), site_url('wp-login.php?action=lostpassword', 'login')));
+                }
             }
         }
         
